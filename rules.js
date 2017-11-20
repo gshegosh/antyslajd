@@ -542,7 +542,7 @@ const rules = [
     "selector": "nav.slideTop .photostoryNavigation .photostoryNextPage",
     "name": "galeria #pagetype_art .photostoryNextPage NOWA GALERIA GAZETY (Wrzesien 2015)",
     "container": "#content_wrap",
-    "removeFromContainer": "#photo_comments, #article_comments, #col_right",
+    "removeFromContainer": "#photo_comments, #article_comments, #col_right, #top_wrap, #gazeta_article_miniatures, #bottom_wrap, .nextSlideWrapper",
     "nextSelector": "nav.slideTop .photostoryNavigation .photostoryNextPage"
   },
   {
