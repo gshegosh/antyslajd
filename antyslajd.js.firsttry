@@ -1,0 +1,63 @@
+var H_STYLE = 'background: #666; color: #000; font-weight: bold; margin-top: 80px';
+
+var href = window.location.href;
+var base = window.location.protocol + '//' + window.location.host;
+
+if (href.indexOf('://kwejk.pl') !== -1) {
+  var thumbs = document.querySelectorAll('.jcarousel li img');
+  var sf = document.querySelector('.self');
+
+  for (var i = 1; i < thumbs.length; i++) {
+    var sfc = sf.cloneNode(true);
+    var h = document.createElement('h3');
+    h.innerHTML = 'Slajd ' + (i + 1) + ':';
+    h.setAttribute('style', H_STYLE);
+    sf.parentNode.appendChild(h);
+    sf.parentNode.appendChild(sfc);
+    var src = thumbs[i].getAttribute('src').replace(/_thumb/, '');
+    sfc.querySelector('img').setAttribute('src', src);
+  }
+
+  var h = document.createElement('h3');
+  h.innerHTML = 'Slajd 1';
+  h.setAttribute('style', H_STYLE);
+  sf.insertAdjacentElement('afterbegin', h);
+
+  document.querySelector('.jcarousel-wrapper').remove();
+} else if (href.indexOf('://ladnydom.pl') !== -1 && href.indexOf('?i=1') !== -1) {
+  var links = document.querySelectorAll('#gazeta_article_miniatures a');
+  var promises = [];
+  for (var i = 0; i < links.length; i++) {
+    var url = links[i].getAttribute('href');
+    console.log(url);
+    promises.push(window.fetch(base + url).then(function (response) {
+      return response.text();
+    }));
+  }
+  Promise.all(promises).then(function (htmls) {
+    for (var i = 0; i < htmls.length; i++) {
+      var html = htmls[i];
+      var tpl = document.createElement('template');
+      tpl.innerHTML = html;
+      var art = tpl.content.querySelector('#gazeta_article');
+      art.setAttribute(art.getAttribute')
+      console.log(9999, art);
+    }
+    console.log(555, htmls);
+  });
+  // console.log(5555, promises);
+  // promises[0].then(function (html) {
+  //   console.log(5656, html);
+  // });
+  // var htmlPromises = [];
+  // Promise.all(promises).then(function (responses) {
+  //   for (var i = 0; i < responses.length; i++) {
+  //     htmlPromises.push(responses[i].text();
+  //   }
+  // });
+  // console.log(6666, htmlPromises);
+  // Promise.all(htmlPromises).then(function (htmls) {
+  //   console.log(777, htmls);
+  // });
+  document.querySelector('#gazeta_article_miniatures').style.border = '10px solid red';
+}
