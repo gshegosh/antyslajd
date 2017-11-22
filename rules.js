@@ -970,7 +970,7 @@ const rules = [
     "nextSelector":"nav.slideTop .photostoryNavigation .photostoryNextPage",
     "removeFromPage":"#bottom_wrap, .photostoryNavigation, #gazeta_article_miniatures, #banP1, #banP2, #banP3, #banP4,#banP62, .photostoryNextPage, .photostoryPrevPage, #gazeta_article_image div.overlayBright, #gazeta_article .nextSlideWrapper, .galleryNavigation",
     "elementsToEmpty":"script:not([src])",
-    "removeFromContainer":"#photo_comments, #article_comments, #col_right",
+    "removeFromContainer":"#photo_comments, #article_comments, #col_right, #gazeta_article_miniatures, .holder_bottom, .nextSlideWrapper",
     "placeholderSelector":"#columns_wrap",
     "itemSelector":"#content_wrap",
     "customStyles":{
