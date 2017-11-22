@@ -6,20 +6,8 @@ function Antyslajd() {
   this.main = () => {
     this.rule = this.matchRule();
     if (this.rule) {
-      console.log('MATCHED', this.rule);
       this.load(location.href);
-      // this.parseForNext(document);
-      // const next = document.querySelector(rule.nextSelector);
-      // const nextUrl = next.getAttribute('href');
-      // let htmls = [];
-      // let seenUrls = [ nextUrl ];
-      // if (next) {
-      //   load(seenUrls, htmls, rule, nextUrl);
-      // }
-    } else {
-      console.log('Antyslajd: nothing matched');
     }
-
   };
 
   this.matchRule = () => {
@@ -58,7 +46,7 @@ function Antyslajd() {
           FORBID_TAGS: ['script'],
           SANITIZE_DOM: false
         });
-        this.urlHtmls[url] = sanitizedHtml;
+        this.urlHtmls[basedUrl] = sanitizedHtml;
         this.parseForNext(sanitizedHtml);
       });
       req.open('GET', basedUrl);
@@ -77,7 +65,36 @@ function Antyslajd() {
     const commonUrlEnd = this.commonEnd(this.urls[0], this.urls[this.urls.length - 1]);
     this.urls.sort(this.createUrlComparator(commonUrlStart, commonUrlEnd));
 
-    console.log(42, this.urls);
+    const tmp = document.querySelectorAll('#antyslajd');
+    for (let i = 0; i < tmp.length; i++) tmp[i].remove();
+
+    let el = document.createElement('div');
+    el.setAttribute('id', 'antyslajd');
+    // el.style.background = window.getComputedStyle(document.querySelector('body')).backgroundColor;
+
+    let slide = 0;
+    this.urls.forEach(url => {
+      const div = this.urlHtmls[url].querySelector(this.rule.container);
+      div.style.display = 'inline-block';
+      div.style.clear = 'both';
+      div.style.margin = '20px auto';
+
+      const tmp = div.querySelectorAll(this.rule.removeFromContainer);
+      for (let i = 0; i < tmp.length; i++) tmp[i].remove();
+
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('class', 'antyslajd-wrapper');
+      wrapper.appendChild(div);
+
+      const h3 = document.createElement('h3');
+      h3.setAttribute('class', 'antyslajd');
+      h3.innerHTML = 'Slajd ' + (++slide) + ' / ' + this.urls.length;
+
+      el.appendChild(h3);
+      el.appendChild(wrapper);
+    });
+
+    document.querySelector('body').insertAdjacentElement('afterbegin', el);
   };
 
   this.commonStart = (a, b) => {

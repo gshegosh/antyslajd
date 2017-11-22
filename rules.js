@@ -55,7 +55,7 @@ const rules = [
     "antiTrigger": "body#pagetype_index .mod_suwakiRwd",
     "name": "galeria #pagetype_art .photostoryNextPage NOWA GALERIA GAZETY (12)",
     "container": "#content_wrap",
-    "removeFromContainer": "#photo_comments, #article_comments, #col_right",
+    "removeFromContainer": "#photo_comments, #article_comments, #col_right, #bottom_wrap",
     "nextSelector": "div#content .photostoryNavigation .photostoryNextPage"
   },
   {
