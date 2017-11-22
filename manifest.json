@@ -1,7 +1,13 @@
 {
   "manifest_version": 2,
   "name": "Antyslajd",
-  "version": "0.0.2",
+  "version": "0.0.3",
+  "icons": {
+    "48": "icon.png"
+  },
+  "author": "Krop.pl",
+  "homepage_url": "https://krop.pl/",
+  
 
   "description": "Usuwa slajdy na kwejk.pl, gazeta.pl i innych portalach.",
 

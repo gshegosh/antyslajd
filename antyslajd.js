@@ -6,9 +6,8 @@ function Antyslajd() {
   this.main = () => {
     this.rule = this.matchRule();
     if (this.rule) {
-      console.log(this.rule.name, this.rule);
-      this.showBtn(true);
-      this.load(location.href);
+      console.log('Antyslajd', this.rule.name, this.rule);
+      this.showBtn();
     }
   };
 
@@ -32,10 +31,13 @@ function Antyslajd() {
         return;
       }
     }
-    this.showBtn();
+    this.render();
   };
 
   this.load = (url) => {
+    const abtn = document.querySelector('#antyslajdbtn');
+    abtn.innerHTML = 'Wczytuję slajdy (' + (this.urls.length + 1) + ')...';
+
     const basedUrl = this.baseUrl(url);
     if (!this.urls.includes(basedUrl)) {
       this.urls.push(basedUrl);
@@ -53,23 +55,23 @@ function Antyslajd() {
       req.open('GET', basedUrl);
       req.send();
     } else {
-      this.showBtn();
+      this.render();
     }
   };
 
-  this.showBtn = (preparing) => {
-    const abtn = document.querySelector('#antyslajdbtn');
-    if (abtn) abtn.remove();
-
+  this.showBtn = () => {
     const placeholder = document.querySelector(this.rule.placeholderSelector);
     const rect = placeholder.getBoundingClientRect();
     const btn = document.createElement('a');
     btn.setAttribute('id', 'antyslajdbtn');
-    if (!preparing) btn.setAttribute('class', 'ready');
-    btn.innerHTML = preparing ? 'Anty...' : 'Antyslajd';
+    btn.innerHTML = 'Antyslajd';
     btn.style.left = rect.left + 'px';
     btn.style.top = rect.top + 'px';
-    if (!preparing) btn.onclick = this.render;
+    btn.onclick = () => {
+      btn.onclick = false;
+      btn.innerHTML = 'Wczytuję slajdy...';
+      this.load(location.href);
+    };
     document.querySelector('body').appendChild(btn);    
   }  
 
@@ -100,11 +102,11 @@ function Antyslajd() {
 
     let slide = 0;
     this.urls.forEach(url => {
-      console.log('a-1');
-      const tmp = this.urlHtmls[url].querySelectorAll(this.rule.removeFromContainer);
-      for (let i = 0; i < tmp.length; i++) tmp[i].remove();
-
       const item = this.urlHtmls[url].querySelector(this.rule.itemSelector);
+
+      const tmp = item.querySelectorAll(this.rule.removeFromContainer);
+      console.log(this.rule.removeFromContainer, tmp);
+      for (let i = 0; i < tmp.length; i++) tmp[i].remove();
 
       const h3 = document.createElement('h3');
       h3.setAttribute('class', 'antyslajd');
