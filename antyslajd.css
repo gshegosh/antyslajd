@@ -1,18 +1,6 @@
-#antyslajd {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 2147483000;
-  background: #666;
-}
-
-.antyslajd-wrapper {
-  text-align: center;
-}
-
 h3.antyslajd {
   text-align: center;
   font-weight: bold;
   margin: 50px 0 0px 0;
+  clear: both;
 }

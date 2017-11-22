@@ -6,6 +6,7 @@ function Antyslajd() {
   this.main = () => {
     this.rule = this.matchRule();
     if (this.rule) {
+      console.log(this.rule.name, this.rule);
       this.load(location.href);
     }
   };
@@ -65,33 +66,30 @@ function Antyslajd() {
     const commonUrlEnd = this.commonEnd(this.urls[0], this.urls[this.urls.length - 1]);
     this.urls.sort(this.createUrlComparator(commonUrlStart, commonUrlEnd));
 
-    const tmp = document.querySelectorAll('#antyslajd');
+    const placeholder = document.querySelector(this.rule.placeholderSelector);
+    placeholder.innerHTML = '';
+
+    let tmp = document.querySelectorAll(this.rule.removeFromPage);
     for (let i = 0; i < tmp.length; i++) tmp[i].remove();
 
-    let el = document.createElement('div');
-    el.setAttribute('id', 'antyslajd');
-    // el.style.background = window.getComputedStyle(document.querySelector('body')).backgroundColor;
+
+    // tmp = document.querySelector(this.rule.itemSelector);
+    // tmp = tmp.querySelectorAll(this.rule.removeFromContainer);
+    // for (let i = 0; i < tmp.length; i++) tmp[i].remove();
 
     let slide = 0;
     this.urls.forEach(url => {
-      const div = this.urlHtmls[url].querySelector(this.rule.container);
-      div.style.display = 'inline-block';
-      div.style.clear = 'both';
-      div.style.margin = '20px auto';
+      const item = this.urlHtmls[url].querySelector(this.rule.itemSelector);
 
-      const tmp = div.querySelectorAll(this.rule.removeFromContainer);
+      const tmp = item.querySelectorAll(this.rule.removeFromContainer);
       for (let i = 0; i < tmp.length; i++) tmp[i].remove();
-
-      const wrapper = document.createElement('div');
-      wrapper.setAttribute('class', 'antyslajd-wrapper');
-      wrapper.appendChild(div);
 
       const h3 = document.createElement('h3');
       h3.setAttribute('class', 'antyslajd');
-      h3.innerHTML = 'Slajd ' + (++slide) + ' / ' + this.urls.length;
+      h3.innerHTML = 'Antyslajd ' + (++slide) + ' / ' + this.urls.length;
 
-      el.appendChild(h3);
-      el.appendChild(wrapper);
+      placeholder.insertAdjacentElement('beforeend', h3);
+      placeholder.insertAdjacentElement('beforeend', item);
     });
 
     document.querySelector('body').insertAdjacentElement('afterbegin', el);
