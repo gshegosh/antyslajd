@@ -1,6 +1,45 @@
 h3.antyslajd {
   text-align: center;
   font-weight: bold;
-  margin: 50px 0 0px 0;
+  margin: 80px 0 0px 0;
   clear: both;
+}
+
+#antyslajdbtn {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #d7efd9;
+  padding: 8px 16px;
+  position: absolute;
+  z-index: 2147483000;
+  cursor: pointer;
+  background: -moz-linear-gradient(
+    top,
+    #0faf1c 0%,
+    #0c9417);
+  border-radius: 6px;
+  border: 1px solid #23ba30;
+  box-shadow:
+    0px 1px 3px rgba(000,000,000,0.05),
+    inset 0px 0px 1px rgba(255,255,255,1);
+  text-shadow:
+    0px 1px 0px rgba(000,000,000,0.5),
+    1px 1px 0px rgba(000,000,000,0.2);
+}
+
+#antyslajdbtn.ready {
+  cursor: pointer;
+}
+
+#antyslajdbtn.ready:hover, #antyslajdbtn.ready:active {
+  background: -moz-linear-gradient(
+    top,
+    #62d16b 0%,
+    #0faf1c);
+  color: #fff;
+}
+
+.antygreen {
+  color: #0faf1c;
 }
