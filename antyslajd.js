@@ -1,19 +1,128 @@
-const base = window.location.protocol + '//' + window.location.host;
+function Antyslajd() {
+  this.rule = false;
+  this.urls = [];
+  this.urlHtmls = {};
 
-function baseUrl(url) {
-  return url.startsWith('http') ? url : (base + url);
-}
-
-function matchRule() {
-  for (let i = 0; i < rules.length; i++) {
-    const rule = rules[i];
-    const rulesCount = rule.selector.split(',').length;
-    if (document.querySelectorAll(rule.selector).length === rulesCount && (!rule.antiSelector || document.querySelectorAll(rule.antiSelector).length === 0)) {
-      return rule;
+  this.main = () => {
+    this.rule = this.matchRule();
+    if (this.rule) {
+      console.log('MATCHED', this.rule);
+      this.load(location.href);
+      // this.parseForNext(document);
+      // const next = document.querySelector(rule.nextSelector);
+      // const nextUrl = next.getAttribute('href');
+      // let htmls = [];
+      // let seenUrls = [ nextUrl ];
+      // if (next) {
+      //   load(seenUrls, htmls, rule, nextUrl);
+      // }
+    } else {
+      console.log('Antyslajd: nothing matched');
     }
-  }
-  return false;
+
+  };
+
+  this.matchRule = () => {
+    for (let i = 0; i < rules.length; i++) {
+      const rule = rules[i];
+      const triggerCount = rule.trigger.split(',').length;
+      if (document.querySelectorAll(rule.trigger).length === triggerCount && (!rule.antiTrigger || document.querySelectorAll(rule.antiTrigger).length === 0)) {
+        return rule;
+      }
+    }
+    return false;
+  };
+
+  this.parseForNext = (dom) => {
+    const next = dom.querySelector(this.rule.nextSelector);
+    if (next != null) {
+      const nextUrl = next.getAttribute('href');
+      if (nextUrl != null) {
+        this.load(nextUrl);
+        return;
+      }
+    }
+    this.render();
+  };
+
+  this.load = (url) => {
+    const basedUrl = this.baseUrl(url);
+
+    if (!this.urls.includes(basedUrl)) {
+      this.urls.push(basedUrl);
+      const req = new XMLHttpRequest();
+      req.addEventListener('load', (e) => {
+          var sanitizedHtml = DOMPurify.sanitize(e.target.responseText, {
+          WHOLE_DOCUMENT: true,
+          RETURN_DOM: true,
+          FORBID_TAGS: ['script'],
+          SANITIZE_DOM: false
+        });
+        this.urlHtmls[url] = sanitizedHtml;
+        this.parseForNext(sanitizedHtml);
+      });
+      req.open('GET', basedUrl);
+      req.send();
+    } else {
+      this.render();
+    }
+  };
+  
+  this.baseUrl = (url) => url.startsWith('http') ? url : (window.location.protocol + '//' + window.location.host + url);
+
+  this.render = () => {
+    // try sorting on gallery page number extracted from URL
+    this.urls.sort();
+    const commonUrlStart = this.commonStart(this.urls[0], this.urls[this.urls.length - 1]);
+    const commonUrlEnd = this.commonEnd(this.urls[0], this.urls[this.urls.length - 1]);
+    this.urls.sort(this.createUrlComparator(commonUrlStart, commonUrlEnd));
+
+    console.log(42, this.urls);
+  };
+
+  this.commonStart = (a, b) => {
+    let start = -1;
+    for (let i = 0; i < a.length && i < b.length; i++) {
+      if (a[i] == b[i]) {
+        start = i;
+      } else {
+        break;
+      }
+    }
+    return start === -1 ? '' : a.substring(0, start + 1);
+  };
+
+  this.commonEnd = (a, b) => {
+    let end = -1;
+    for (let i = a.length - 1; i >= 0 && i + b.length - a.length >= 0; i--) {
+      if (a[i] === b[i + b.length - a.length]) {
+        end = i;
+      } else {
+        break;
+      }
+    }
+    return end === -1 ? '' : a.substring(end, a.length);
+  };
+
+  this.isNumber = (n) => {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  };
+
+  this.createUrlComparator = (start, end) => (oa, ob) => {
+    let a = oa.replace(start, '').replace(end, '');
+    let b = ob.replace(start, '').replace(end, '');
+    if (this.isNumber(a) && this.isNumber(b)) {
+      a = 1 * a;
+      b = 1 * b;
+    }
+    return a < b ? -1 : (a === b ? 0 : 1);
+  };
 }
+
+new Antyslajd().main();
+
+/*
+
 
 function load(seenUrls, htmls, rule, url) {
   const req = new XMLHttpRequest();
@@ -89,3 +198,4 @@ if (rule) {
 } else {
   console.log('Antyslajd: nothing matched1');
 }
+*/
