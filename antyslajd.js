@@ -105,7 +105,6 @@ function Antyslajd() {
       const item = this.urlHtmls[url].querySelector(this.rule.itemSelector);
 
       const tmp = item.querySelectorAll(this.rule.removeFromContainer);
-      console.log(this.rule.removeFromContainer, tmp);
       for (let i = 0; i < tmp.length; i++) tmp[i].remove();
 
       const h3 = document.createElement('h3');
@@ -116,7 +115,11 @@ function Antyslajd() {
       placeholder.insertAdjacentElement('beforeend', item);
     });
 
-    document.querySelector('body').insertAdjacentElement('afterbegin', el);
+    const tmp = document.querySelectorAll('video');
+    for (let i = 0; i < tmp.length; i++) {
+      tmp[i].load();
+      tmp[i].play();
+    }
   };
 
   this.commonStart = (a, b) => {
