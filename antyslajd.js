@@ -35,8 +35,8 @@ function Antyslajd() {
   };
 
   this.load = (url) => {
-    const abtn = document.querySelector('#antyslajdbtn');
-    abtn.innerHTML = 'Wczytuję slajdy (' + (this.urls.length + 1) + ')...';
+    const aprogress = document.querySelector('#antyslajdprogress');
+    if (aprogress) aprogress.innerHTML = '<span style="color: #333">Anty</span><span style="color: #fff">slajd</span>: Wczytuję slajdy (' + (this.urls.length + 1) + ')...';
 
     const basedUrl = this.baseUrl(url);
     if (!this.urls.includes(basedUrl)) {
@@ -60,26 +60,23 @@ function Antyslajd() {
   };
 
   this.showBtn = () => {
-    const placeholder = document.querySelector(this.rule.placeholderSelector);
-    const rect = placeholder.getBoundingClientRect();
-    const btn = document.createElement('a');
-    btn.setAttribute('id', 'antyslajdbtn');
-    btn.innerHTML = 'Antyslajd';
-    btn.style.left = rect.left + 'px';
-    btn.style.top = rect.top + 'px';
-    btn.onclick = () => {
-      btn.onclick = false;
-      btn.innerHTML = 'Wczytuję slajdy...';
-      this.load(location.href);
-    };
-    document.querySelector('body').appendChild(btn);    
-  }  
+    browser.runtime.sendMessage("showBtn");
+  }
+
+  this.onBtnClick = () => {
+    const aprogress = document.createElement('div');
+    aprogress.setAttribute('id', 'antyslajdprogress');
+    aprogress.innerHTML = '<span class="antygreen">Anty</span><span style="color: #fff">slajd</span>: Wczytuję slajdy...';
+    document.querySelector('body').appendChild(aprogress);
+
+    this.load(location.href);
+  };
 
   this.baseUrl = (url) => url.startsWith('http') ? url : (window.location.protocol + '//' + window.location.host + url);
 
   this.render = () => {
-    const btn = document.getElementById('antyslajdbtn');
-    if (btn) btn.remove();
+    const aprogress = document.querySelector('#antyslajdprogress');
+    if (aprogress) aprogress.remove();
 
     // try sorting on gallery page number extracted from URL
     this.urls.sort();
@@ -161,4 +158,9 @@ function Antyslajd() {
   };
 }
 
-new Antyslajd().main();
+const antyslajd = new Antyslajd();
+antyslajd.main();
+
+browser.runtime.onMessage.addListener(msg => {
+  antyslajd.onBtnClick();
+});

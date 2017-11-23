@@ -1,22 +1,38 @@
 {
   "manifest_version": 2,
   "name": "Antyslajd",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "icons": {
     "48": "icon.png"
   },
   "author": "Krop.pl",
   "homepage_url": "https://krop.pl/",
   
-
   "description": "Usuwa slajdy na kwejk.pl, gazeta.pl i innych portalach.",
+
+  "permissions": [
+    "<all_urls>",
+    "tabs"
+  ],
+
+  "page_action": {
+    "browser_style": true,
+    "default_icon": {
+      "19": "icon19.png",
+      "38": "icon38.png"
+    },
+    "default_title": "Antyslajd"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "css": ["antyslajd.css"],
-      "js": ["purify.min.js", "rules.js", "antyslajd.js"]
+      "js": ["purify.min.js", "rules.js"]
     }
   ]
-
 }
