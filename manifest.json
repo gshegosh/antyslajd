@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
   "name": "Antyslajd",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "icons": {
     "48": "icon.png"
   },
   "author": "Krop.pl",
-  "homepage_url": "https://krop.pl/",
+  "homepage_url": "https://www.facebook.com/antyslajd/",
   
   "description": "Usuwa slajdy na kwejk.pl, gazeta.pl i innych portalach.",
 
@@ -32,7 +32,7 @@
     {
       "matches": ["<all_urls>"],
       "css": ["antyslajd.css"],
-      "js": ["purify.min.js", "rules.js"]
+      "js": ["purify.min.js", "rules.js", "antyslajd.js"]
     }
   ]
 }

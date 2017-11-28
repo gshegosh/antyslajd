@@ -1,14 +1,10 @@
-browser.runtime.onMessage.addListener(msg => {
-  browser.tabs.query({active: true, currentWindow: true})
-  .then(tabs => browser.pageAction.show(tabs[0].id));
+browser.runtime.onMessage.addListener((msg, sender) => {
+  browser.pageAction.show(sender.tab.id);
 });
 
-browser.pageAction.onClicked.addListener(() => {
-  browser.tabs.query({active: true, currentWindow: true})
-  .then(tabs => {
-    browser.pageAction.hide(tabs[0].id);
-    browser.tabs.sendMessage(tabs[0].id, "removeSlides");
-  });
+browser.pageAction.onClicked.addListener(tab => {
+  browser.pageAction.hide(tab.id);
+  browser.tabs.sendMessage(tab.id, "removeSlides");
 });
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -18,8 +14,4 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   browser.tabs.executeScript({
     file: "antyslajd.js"
   });
-});
-
-browser.tabs.executeScript({
-  file: "antyslajd.js"
 });
