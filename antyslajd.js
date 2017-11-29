@@ -60,7 +60,13 @@ function Antyslajd() {
   };
 
   this.showBtn = () => {
-    browser.runtime.sendMessage("showBtn");
+    browser.storage.local.get('autorun').then(result => {
+      if (result && result.autorun) {
+        this.onBtnClick();
+      } else {
+        browser.runtime.sendMessage("showBtn");
+      }
+    });
   }
 
   this.onBtnClick = () => {

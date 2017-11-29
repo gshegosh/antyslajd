@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Antyslajd",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icons": {
     "48": "icon.png"
   },
@@ -12,6 +12,7 @@
 
   "permissions": [
     "<all_urls>",
+    "storage",
     "tabs"
   ],
 
@@ -23,6 +24,10 @@
     },
     "default_title": "Antyslajd"
   },
+
+  "options_ui": {
+    "page": "options.html"
+  },  
 
   "background": {
     "scripts": ["background.js"]
